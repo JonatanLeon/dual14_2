@@ -20,6 +20,7 @@ class LoginController extends Controller
         // Comprobamos si el usuario existe en la base de datos y la contraseña es correcta
         if (!is_null($users = User::all())) {
             foreach ($users as $user) {
+                // Desencriptamos la contraseña para ver si coincide con la introducida
                 if ($nombre == $user->nombre && (password_verify($contrasenia, $user->pass))) {
                     $validado = true;
                 }

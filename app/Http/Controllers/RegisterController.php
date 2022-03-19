@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+
 /**
  * Clase controlador que implementa la logica para que un usuario
  * pueda registrarse en la base de datos y poder acceder con sus
@@ -12,7 +13,7 @@ use App\Models\User;
 class RegisterController extends Controller
 {
     public function registrar(Request $request)
-    {   
+    {
         // Recogemos los campos del formulario
         $nombre = $request->regNombre;
         $contrasenia = $request->regContrasenia;
@@ -31,12 +32,14 @@ class RegisterController extends Controller
         // Si no, se comprueba que la contraseña repetida coincida
         else {
             if ($contrasenia != $repeContrasenia) return view('error_password');
-            else if (strlen($contrasenia)<8) return view ('password_corta');
+            // Y luego se comprueba que la contraseña tenga 8 caracteres o mas
+            else if (strlen($contrasenia) < 8) return view('password_corta');
             else {
                 // Y si coinciden se registrara al usuario en la base de  datos
                 $user = new User();
                 $user->nombre = $nombre;
                 $user->pass = $contrasenia;
+                // Encriptamos la contraseña en la base de datos
                 $pass_fuerte = password_hash($contrasenia, PASSWORD_DEFAULT);
                 $user->pass = $pass_fuerte;
                 $user->save();
